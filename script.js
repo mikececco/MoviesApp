@@ -16,6 +16,24 @@ const goldText = document.querySelector("#goldText");
 const monsterStats = document.querySelector("#monsterStats");
 const monsterNameText = document.querySelector("#monsterName");
 const monsterHealthText = document.querySelector("#monsterHealth");
+const weapons = [
+    {
+    name: "stick",
+    power: 5
+    },
+    {
+    name: "dagger",
+    power: 30
+    },
+    {
+    name: "claw hammer",
+    power: 50
+    },
+    {
+    name:"sword",
+    power: 100
+    }
+];
 
 const locations = [
     {
@@ -29,7 +47,13 @@ const locations = [
     "button text": ["Buy 10 health (10 gold)", "Buy weapon (30 gold)", "Go to town square"],
     "button functions": [buyHealth, buyWeapon, goTown],
     text: "You entered the store"
-    }
+    },
+    {
+        name: "cave",
+        "button text": ["Fight slime", "Fight fanged beast", "Go to town square"],
+        "button functions": [fightSlime, fightBeast, goTown],
+        text: "You entered the cave. You might see some monsters"
+        }
 ]
 
 button1.onclick = goStore;
@@ -64,11 +88,45 @@ function fightDragon() {
 }
 
 function buyHealth() {
-
+    if (gold >= 0) {
+        gold -= 10;
+        health += 10;
+        goldText.innerText = gold; //change displayed gold
+        healthText.innerText = health;
+    } else {
+        text.innerText = "You do not have enough gold to buy health!"
+    }
 }
 
 function buyWeapon() {
+    if (currentWeapon < weapons.length - 1){
+        if (gold >= 30){
+            gold -= 30;
+            currentWeapon ++; //increment weapon level
+            let newWeapon = weapons[currentWeapon].name;
+            text.innerText = "You have a " + newWeapon + ".";
+            inventory.push(newWeapon);
+            text.innerText = "In your inventory you have: " + inventory; //since is array it will print each element in array with comma separated values
+        } else {
+            text.innerText = "You do not have enough gold to buy a weapon.";
+        }
+    } else {
+        text.innerText = "You already have the most powerful weapon.";
+        button2.innerText = "Sell weapon for 15 gold";
+        button2.onclick = sellWeapon;
+    }
+}
 
+function fightSlime() {
+
+}
+
+function fightBeast() {
+
+}
+
+function sellWeapon(){
+    
 }
 
 
