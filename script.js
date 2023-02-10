@@ -18,42 +18,66 @@ const monsterNameText = document.querySelector("#monsterName");
 const monsterHealthText = document.querySelector("#monsterHealth");
 const weapons = [
     {
-    name: "stick",
-    power: 5
+        name: "stick",
+        power: 5
     },
     {
-    name: "dagger",
-    power: 30
+        name: "dagger",
+        power: 30
     },
     {
-    name: "claw hammer",
-    power: 50
+        name: "claw hammer",
+        power: 50
     },
     {
-    name:"sword",
-    power: 100
+        name:"sword",
+        power: 100
+    }
+];
+
+const monsters = [
+    {
+        name: "slime",
+        level: 1,
+        health: 15
+    },
+    {
+        name: "fanged beast",
+        level: 8,
+        health: 60
+    },
+    {
+        name: "dragon",
+        level: 20,
+        health: 300
     }
 ];
 
 const locations = [
     {
-    name: "town square",
-    "button text": ["Go to store", "Go to cave", "Fight dragon"],
-    "button functions": [goStore, goCave, fightDragon],
-    text: "You are in the town square. You see the sign that says \"store.\""
+        name: "town square",
+        "button text": ["Go to store", "Go to cave", "Fight dragon"],
+        "button functions": [goStore, goCave, fightDragon],
+        text: "You are in the town square. You see the sign that says \"store.\""
     },
     {
-    name: "store",
-    "button text": ["Buy 10 health (10 gold)", "Buy weapon (30 gold)", "Go to town square"],
-    "button functions": [buyHealth, buyWeapon, goTown],
-    text: "You entered the store"
+        name: "store",
+        "button text": ["Buy 10 health (10 gold)", "Buy weapon (30 gold)", "Go to town square"],
+        "button functions": [buyHealth, buyWeapon, goTown],
+        text: "You entered the store"
     },
     {
         name: "cave",
         "button text": ["Fight slime", "Fight fanged beast", "Go to town square"],
         "button functions": [fightSlime, fightBeast, goTown],
         text: "You entered the cave. You might see some monsters"
-        }
+    },
+    {
+        name: "fight",
+        "button text": ["Attack", "Dodge", "Run"],
+        "button functions": [attack, dodge, goTown],
+        text: "You are fighting a monster."
+    },
 ]
 
 button1.onclick = goStore;
@@ -69,23 +93,19 @@ function update(location) {
     button3.onclick = location["button functions"][2];
     text.innerText = location.text;
 
-}
+};
 
 function goTown() {
     update(locations[0]);
-}
+};
 
 function goStore() {
     update(locations[1]);
-}
+};
 
 function goCave() {
     console.log("Going to cave.");
-}
-
-function fightDragon() {
-    console.log("Fighting dragon.");
-}
+};
 
 function buyHealth() {
     if (gold >= 0) {
@@ -96,11 +116,11 @@ function buyHealth() {
     } else {
         text.innerText = "You do not have enough gold to buy health!"
     }
-}
+};
 
 function buyWeapon() {
     if (currentWeapon < weapons.length - 1){
-        if (gold >= 30){
+        if (gold >= 30) {
             gold -= 30;
             currentWeapon ++; //increment weapon level
             let newWeapon = weapons[currentWeapon].name;
@@ -115,20 +135,50 @@ function buyWeapon() {
         button2.innerText = "Sell weapon for 15 gold";
         button2.onclick = sellWeapon;
     }
-}
+};
+
+
+function sellWeapon() {
+    if (inventory.length > 1) {
+        gold += 15;
+        goldText.innerText = gold;
+        let currentWeapon = inventory.shift(); //removes first element from array
+        text.innerText = "You sold a " + currentWeapon + ".";
+        text.innerText += "In your inventory you have: " + inventory;
+    } else {
+        text.innerText = "Don't sell your only weapon!";
+        
+    }
+};
 
 function fightSlime() {
-
-}
+    fighting = 0;
+    goFight();
+};
 
 function fightBeast() {
+    fighting = 1;
+    goFight();
+};
 
-}
+function fightDragon() {
+    fighting = 2;
+    goFight();
+};
 
-function sellWeapon(){
-    
-}
+function goFight() {
+    update(locations[3]);
+    monsterHealth = monsters[fighting].health;
+    monsterStats.style.display = "block"; //target CSS property to display it - change state
+    monsterNameText.innerText = monsters[fighting].name;
+    monsterHealthText.innerText = monsterHealth;
+};
 
+function attack() {
 
+};
 
+function dodge() {
+
+};
 
